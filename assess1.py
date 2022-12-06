@@ -13,13 +13,13 @@ def get_db_connection():
 def view_contacts():
     connection = get_db_connection()
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM public.view_contacts")
+    cursor.execute("SELECT first_name,last_name,title,organization FROM contacts")
     view = cursor.fetchall()
     cursor.close()
     connection.close()
     print(view)
 #3.6
-def add_contact(first_name, last_name, title, organization):
+def insert_contact(first_name, last_name, title, organization):
     connection = get_db_connection()
     cursor = connection.cursor()
     insert_query = (f"INSERT INTO contacts (first_name, last_name, title, organization)VALUES ('{first_name}', '{last_name}', '{title}', '{organization}');")
@@ -29,23 +29,43 @@ def add_contact(first_name, last_name, title, organization):
     connection.close()
     print(f"{first_name} added!")
 
+#3.7
+def delete_contact(first_name):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    insert_query = (f"DELETE FROM contacts WHERE first_name = '{first_name}';")
+    cursor.execute(insert_query)
+    connection.commit()
+    cursor.close()
+    connection.close()
+    print(f"{first_name} deleted! Hopefully you can be friends again someday.")
+
 #3.5
 print("Welcome! What would you like to do?")
 while True:
     user_input = input("\nLIST \t See an overview of the contacts\n"
     "INSERT \t Add a new contact\nDELETE \t Remove a contact\nQUIT \t Exit the program\n"
     ":").upper()
+
     if user_input == 'LIST':
+        print("First name, Last name, Title, Organization")
         view_contacts()
+    
     elif user_input == 'INSERT':
-        first_name_input = input("What is the first name of the person? ")
-        last_name_input = input("What is the last name of the person? ")
-        title_input = input("Give a title to this person, e.g. brother, mortal enemy? ")
-        organization_input = input("Does this person belong to a certain organization? ")
-        add_contact(first_name_input,last_name_input,title_input,organization_input)
+        first_name_input = input("What is the first name of the person?\n: ")
+        last_name_input = input("What is the last name of the person?\n: ")
+        title_input = input("Give a title to this person, e.g. brother, mortal enemy?\n: ")
+        organization_input = input("Does this person belong to a certain organization?\n: ")
+        insert_contact(first_name_input,last_name_input,title_input,organization_input)
+    
     elif user_input == 'DELETE':
-        print()
+        deletion_input = input("What is the first name of the contact you wish to delete?\n"
+        "Very convenient for me, your contact application, that you don't know anyone who shares the same name...\n:")
+        delete_contact(deletion_input)
+
     elif user_input == 'QUIT':
+        print("Bye!")
         exit()
+        
     else:
         print("Invalid input!")
