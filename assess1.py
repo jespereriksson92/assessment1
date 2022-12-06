@@ -1,5 +1,5 @@
 import psycopg2
-
+#3.3
 def get_db_connection():
     connection = psycopg2.connect(
             user="postgres",
@@ -9,13 +9,27 @@ def get_db_connection():
             database="assessmentdb")
     return connection
 
-def list_db():
+#3.4
+def view_contacts():
     connection = get_db_connection()
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM public.view_contacts")
-    complete_database = cursor.fetchall()
+    view = cursor.fetchall()
     cursor.close()
     connection.close()
-    print(complete_database)
-
-list_db()
+    print(view)
+print("Welcome! What would you like to do?")
+while True:
+    user_input = input("\nLIST \t See an overview of the contacts\n"
+    "INSERT \t Add a new contact\nDELETE \t Remove a contact\nQUIT \t Exit the program\n"
+    ":").upper()
+    if user_input == 'LIST':
+        view_contacts()
+    elif user_input == 'INSERT':
+        print()
+    elif user_input == 'DELETE':
+        print()
+    elif user_input == 'QUIT':
+        exit()
+    else:
+        print("Invalid input!")
