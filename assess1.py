@@ -9,3 +9,13 @@ def get_db_connection():
             database="assessmentdb")
     return connection
 
+def list_db():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM public.view_contacts")
+    complete_database = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    print(complete_database)
+
+list_db()
